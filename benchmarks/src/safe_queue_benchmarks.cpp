@@ -20,10 +20,7 @@
 
 void QueueParameters(benchmark::internal::Benchmark* benchmark) {
     benchmark->ArgNames({"QSize"});
-
-    for (int e = 8; e <= 256; e*=2) {
-        benchmark->Args({e});
-    }
+    benchmark->Args({256});
 }
 
 std::unique_ptr<kpsr::mem::SafeQueue<std::string>> safeQueue;
@@ -85,5 +82,5 @@ static void SafeQueuePop(benchmark::State &state)
     }
 }
 
-BENCHMARK(SafeQueuePush)->Apply(QueueParameters)->ThreadRange(1, 8)->UseRealTime()->Setup(DoSetup);
-BENCHMARK(SafeQueuePop)->Apply(QueueParameters)->ThreadRange(1, 8)->UseRealTime()->Setup(DoSetup);
+BENCHMARK(SafeQueuePush)->Apply(QueueParameters)->DenseThreadRange(10, 50, 10)->UseRealTime()->Setup(DoSetup);
+BENCHMARK(SafeQueuePop)->Apply(QueueParameters)->DenseThreadRange(10, 50, 10)->UseRealTime()->Setup(DoSetup);
