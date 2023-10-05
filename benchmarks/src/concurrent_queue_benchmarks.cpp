@@ -20,10 +20,7 @@ moodycamel::ConcurrentQueue<std::string> cQueue;
 
 void ConcurrentQueueParameters(benchmark::internal::Benchmark* benchmark) {
     benchmark->ArgNames({"QSize"});
-
-    for (int e = 2; e <= 64; e*=2) {
-        benchmark->Args({e});
-    }
+    benchmark->Args({256});
 }
 
 static void ConcurrentQueuePush(benchmark::State &state)
@@ -73,5 +70,5 @@ static void ConcurrentQueuePop(benchmark::State &state)
     }
 }
 
-BENCHMARK(ConcurrentQueuePush)->Apply(ConcurrentQueueParameters)->ThreadRange(1,8)->UseRealTime();
-BENCHMARK(ConcurrentQueuePop)->Apply(ConcurrentQueueParameters)->ThreadRange(1,8)->UseRealTime();
+BENCHMARK(ConcurrentQueuePush)->Apply(ConcurrentQueueParameters)->DenseThreadRange(10, 50, 10)->UseRealTime();
+BENCHMARK(ConcurrentQueuePop)->Apply(ConcurrentQueueParameters)->DenseThreadRange(10, 50, 10)->UseRealTime();
